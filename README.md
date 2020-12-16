@@ -1,9 +1,3 @@
-# Python Project Setup
+# Quick slack
 
-- This repository is template for my python project
-
-## Things to be changed
-
-- "README.md" file contents
-- "setup.py" file contents
-- "sample_package" directory name
+- CLI tool to send message to mornitor status, notify process end, etc by slack.
