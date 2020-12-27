@@ -1,11 +1,21 @@
 import sys
+from typing import Any, Dict, Optional
 
 import requests
 
 from .utils import load_config
 
 
-def send_message(text, channel_id=None, mention=False):
+def send_message(text: str, channel_id: Optional[str] = None, mention: bool = False) -> Dict[str, Any]:
+    """
+    Send text to slack channel
+
+    :param text: (str) message to send
+    :param channel_id: (str) the channel id of which send message to channel, default is in config
+    :param mention: (bool) if True, mention default mention users and groups else don't
+
+    :return: response Dictionary. refer https://api.slack.com/methods/chat.postMessage for format
+    """
     config = load_config()
 
     if channel_id is None:
@@ -23,7 +33,13 @@ def send_message(text, channel_id=None, mention=False):
     return response
 
 
-def get_channel_id(channel_name):
+def get_channel_id(channel_name: str) -> Optional[str]:
+    """
+    Get channel id by channel name
+
+    :param channel_name: (str) Channel name ex) random, general
+    :return: (str) channel id consisting of numbers and upper case alphabets or None if not foumd
+    """
     config = load_config()
 
     uri = "https://slack.com/api/conversations.list"
@@ -46,7 +62,13 @@ def get_channel_id(channel_name):
             return None
 
 
-def get_user_id(username):
+def get_user_id(username: str) -> Optional[str]:
+    """
+    Get user id from username
+
+    :param username: (str) username is used for mention in slack ex) @user1 -> user1 is the username
+    :return: (str) user id consisting of numbers and upper case alphabets or None if not foumd
+    """
     config = load_config()
 
     uri = "https://slack.com/api/users.list"
@@ -69,7 +91,13 @@ def get_user_id(username):
             return None
 
 
-def get_direct_message_id(username):
+def get_direct_message_id(username: str) -> Optional[str]:
+    """
+    Get Direct message conversation id, it is like get_channel_id but for DMs
+
+    :param username: (str) username is used for mention in slack ex) @user1 -> user1 is the username
+    :return: (str) DM channel id consisting of numbers and upper case alphabets or None if not foumd
+    """
     userid = get_user_id(username)
 
     if userid is None:
@@ -96,7 +124,14 @@ def get_direct_message_id(username):
             return None
 
 
-def get_usergroup_id(usergroup_handle):
+def get_usergroup_id(usergroup_handle: str) -> Optional[str]:
+    """
+    Get usergroup id, usergroup means custom usergroup like (@product, @engineer, @marketing)
+    The names may be also different
+
+    :param usergroup_handle: (str) handler means (product, engineer or marketing) in upper example
+    :return: (str) usergroup id
+    """
     config = load_config()
 
     uri = "https://slack.com/api/usergroups.list"
@@ -109,3 +144,4 @@ def get_usergroup_id(usergroup_handle):
     for usergroup_info in response["usergroups"]:
         if usergroup_handle == usergroup_info["handle"]:
             return usergroup_info["id"]
+    return None

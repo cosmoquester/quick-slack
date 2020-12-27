@@ -11,8 +11,9 @@ from .utils import load_config, modify_config, run_background
 config = click.Group()
 
 
-@config.command(help="Show current configs")
+@config.command()
 def show():
+    """ Show current configs """
     config = load_config()
     for key, value in config.items():
         click.echo(f"{key:20s}: {str(value) if value else 'None'}")
@@ -26,7 +27,7 @@ def show():
     help="Default channel name to send message, enter '@username' if channel is direct message",
 )
 @click.option("--default-channel-id", help="Default channel id to send message")
-def set_config(api_token, default_mentions, default_channel_name, default_channel_id):
+def set_config(api_token: str, default_mentions: str, default_channel_name: str, default_channel_id: str):
     """
     Set configurations
 
@@ -86,10 +87,11 @@ def set_config(api_token, default_mentions, default_channel_name, default_channe
 @click.argument("message")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention user/groups")
 @click.option("-c", "--channel-name", help="Channel name to send message, use default channel in config if not passed")
-def send(message, mention, channel_name):
+def send(message: str, mention: bool, channel_name: str):
     """ Send message to the channel """
     config = load_config()
 
+    # Get channel id
     if channel_name:
         if channel_name[0] == "@":
             channel_id = get_direct_message_id(channel_name[1:])
@@ -101,6 +103,7 @@ def send(message, mention, channel_name):
     else:
         channel_id = config["default_channel_id"]
 
+    # Send message
     response = send_message(message, channel_id, mention)
     if not response["ok"]:
         click.echo("Error occured in sending message!", err=True)
@@ -114,7 +117,7 @@ def send(message, mention, channel_name):
 @click.option("-s", "--success", help="Message sent if command success")
 @click.option("-f", "--fail", help="Message sent if command failed")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
-def cond(command, success, fail, mention):
+def cond(command: str, success: str, fail: str, mention: bool):
     """ Run command and send message based on whether success command """
     result = subprocess.run(shlex.split(command))
 
@@ -132,7 +135,7 @@ def cond(command, success, fail, mention):
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 @click.option("-s", "--silent", is_flag=True, help="If use this flag, ignore output else print output")
 @click.option("-b", "--backgroud", is_flag=True, help="Run this command backgroud")
-def watch(command, interaval, mention, silent, backgroud):
+def watch(command: str, interaval: float, mention: bool, silent: bool, backgroud: bool):
     """ Execute command every interval and send message of excution output """
 
     def _task():
@@ -155,7 +158,7 @@ def watch(command, interaval, mention, silent, backgroud):
 @click.argument("message")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 @click.option("-n", "--interaval", type=click.FLOAT, default=1.0, help="seconds to wait between checking liveness")
-def ifend(process_id, message, mention, interaval):
+def ifend(process_id: int, message: str, mention: bool, interaval: float):
     """
     Check the process is alive in every three seconds and when the process is dead, send message
 
