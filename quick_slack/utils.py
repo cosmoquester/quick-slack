@@ -8,7 +8,7 @@ CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 
 def load_config() -> Dict[str, Union[str, List[str]]]:
     """ Load config file """
-    with open(CONFIG_FILE_PATH) as f:
+    with open(CONFIG_FILE_PATH, encoding="utf-8") as f:
         config = json.load(f)
     return config
 
@@ -23,7 +23,7 @@ def modify_config(key: str, value: Union[str, List[str]]):
     config = load_config()
     config[key] = value
 
-    with open(CONFIG_FILE_PATH, "w") as f:
+    with open(CONFIG_FILE_PATH, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=4)
 
 
