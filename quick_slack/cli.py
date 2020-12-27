@@ -1,5 +1,6 @@
 import shlex
 import subprocess
+from time import sleep
 
 import click
 
@@ -131,8 +132,11 @@ def cond(command, success, fail, mention):
 @click.option("-n", "--interaval", type=click.FLOAT, help="seconds to wait between updates")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 def watch(command, interaval, mention):
-    # TODO: Implement
-    pass
+    """ Execute command every interval and send message of excution output """
+    while True:
+        result = subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        send_message(result.stdout.decode("utf-8"), mention=mention)
+        sleep(interaval)
 
 
 @click.command()
