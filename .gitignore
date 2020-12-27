@@ -18,3 +18,8 @@ venv.bak/
 
 # log file
 *.log
+
+# build byproducts
+build/
+dist/
+quick_slack.egg-info/
