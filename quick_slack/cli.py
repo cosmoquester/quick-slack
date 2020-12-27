@@ -1,3 +1,6 @@
+import shlex
+import subprocess
+
 import click
 
 from .low_api import get_channel_id, get_direct_message_id, get_usergroup_id, send_message
@@ -79,7 +82,7 @@ def set_config(api_token, default_mentions, default_channel_name, default_channe
 
 @click.command()
 @click.argument("message")
-@click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
+@click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention user/groups")
 @click.option("-c", "--channel-name", help="Channel name to send message, use default channel in config if not passed")
 def send(message, mention, channel_name):
     """
@@ -98,10 +101,7 @@ def send(message, mention, channel_name):
     else:
         channel_id = config["default_channel_id"]
 
-    if mention:
-        message = " ".join(config["default_mentions"]) + "\n" + message
-
-    response = send_message(config["slack_oauth_token"], channel_id, message)
+    response = send_message(message, channel_id, mention)
     if not response["ok"]:
         click.echo("Error occured in sending message!", err=True)
         click.echo(str(response), err=True)
@@ -115,8 +115,15 @@ def send(message, mention, channel_name):
 @click.option("-f", "--fail", help="Message sent if command failed")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 def cond(command, success, fail, mention):
-    # TODO: Implement
-    pass
+    """ Run command and send message based on whether success command """
+    result = subprocess.run(shlex.split(command))
+
+    if result.returncode == 0 and success:
+        click.echo("Command success")
+        send_message(success, mention=mention)
+    if result.returncode != 0 and fail:
+        click.echo("Command failed")
+        send_message(fail, mention=mention)
 
 
 @click.command()
