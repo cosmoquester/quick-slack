@@ -79,7 +79,7 @@ class TestCLI:
         assert result.exit_code == 0
         assert result.output == ""
 
-        result = self.runner.invoke(self.qslack, ["cond", "what the there is none command", "-f", "bad"])
+        result = self.runner.invoke(self.qslack, ["cond", "bash -c 'exit 1'", "-f", "bad"])
         assert result.exit_code == 0
         assert result.output == "Command failed\n"
 
