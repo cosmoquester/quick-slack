@@ -131,15 +131,23 @@ def cond(command, success, fail, mention):
 @click.option("-n", "--interaval", type=click.FLOAT, help="seconds to wait between updates")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 @click.option("-s", "--silent", is_flag=True, help="If use this flag, ignore output else print output")
-def watch(command, interaval, mention, silent):
+@click.option("-b", "--backgroud", is_flag=True, help="Run this command backgroud")
+def watch(command, interaval, mention, silent, backgroud):
     """ Execute command every interval and send message of excution output """
-    while True:
-        result = subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        output = result.stdout.decode("utf-8")
-        send_message(output, mention=mention)
-        if not silent:
-            print(output)
-        sleep(interaval)
+
+    def _task():
+        while True:
+            result = subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            output = result.stdout.decode("utf-8")
+            send_message(output, mention=mention)
+            if not silent:
+                print(output)
+            sleep(interaval)
+
+    if backgroud:
+        run_background(_task)
+    else:
+        _task()
 
 
 @click.command()
