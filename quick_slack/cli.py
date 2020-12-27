@@ -8,7 +8,7 @@ import psutil
 from .low_api import get_channel_id, get_direct_message_id, get_usergroup_id, send_message
 from .utils import load_config, modify_config, run_background
 
-config = click.Group()
+config = click.Group(help="Show or update configs")
 
 
 @config.command()
@@ -139,7 +139,7 @@ def cond(command: str, success: str, fail: str, mention: bool):
 
 @click.command()
 @click.argument("command")
-@click.option("-n", "--interaval", type=click.FLOAT, help="seconds to wait between updates")
+@click.option("-n", "--interaval", type=click.FLOAT, default=2, help="seconds to wait between updates")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
 @click.option("-s", "--silent", is_flag=True, help="If use this flag, ignore output else print output")
 @click.option("-b", "--backgroud", is_flag=True, help="Run this command backgroud")
