@@ -123,10 +123,18 @@ def cond(command: str, success: str, fail: str, mention: bool):
 
     if result.returncode == 0 and success:
         click.echo("Command success")
-        send_message(success, mention=mention)
-    if result.returncode != 0 and fail:
-        click.echo("Command failed")
-        send_message(fail, mention=mention)
+        response = send_message(success, mention=mention)
+    elif result.returncode != 0 and fail:
+        click.echo(f"Command exit with {result.returncode}")
+        response = send_message(fail, mention=mention)
+    else:
+        exit(0)
+
+    if not response["ok"]:
+        click.echo("Error occured in sending message!", err=True)
+        click.echo(str(response), err=True)
+        exit(1)
+    click.echo("Sending message is done.")
 
 
 @click.command()
@@ -142,7 +150,13 @@ def watch(command: str, interaval: float, mention: bool, silent: bool, backgroud
         while True:
             result = subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             output = result.stdout.decode("utf-8")
-            send_message(output, mention=mention)
+
+            response = send_message(output, mention=mention)
+            if not response["ok"]:
+                click.echo("Error occured in sending message!", err=True)
+                click.echo(str(response), err=True)
+                exit(1)
+
             if not silent:
                 print(output)
             sleep(interaval)
@@ -170,7 +184,11 @@ def ifend(process_id: int, message: str, mention: bool, interaval: float):
         print(f"Start mornitoring process {process_id}...")
         while psutil.pid_exists(process_id):
             sleep(interaval)
-        send_message(message, mention=mention)
+        response = send_message(message, mention=mention)
+        if not response["ok"]:
+            click.echo("Error occured in sending message!", err=True)
+            click.echo(str(response), err=True)
+            exit(1)
 
     run_background(_task)
 

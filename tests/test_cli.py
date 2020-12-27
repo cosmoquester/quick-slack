@@ -71,9 +71,10 @@ class TestCLI:
     def test_cond(self):
         assert self.runner.invoke(self.qslack, ["cond", "--help"]).exit_code == 0
 
+        cli.send_message = lambda *args, **kwargs: {"ok": True}
         result = self.runner.invoke(self.qslack, ["cond", "pwd", "-s", "good"])
         assert result.exit_code == 0
-        assert result.output == "Command success\n"
+        assert result.output == "Command success\nSending message is done.\n"
 
         result = self.runner.invoke(self.qslack, ["cond", "pwd", "-f", "bad", "-m"])
         assert result.exit_code == 0
@@ -81,7 +82,7 @@ class TestCLI:
 
         result = self.runner.invoke(self.qslack, ["cond", "bash -c 'exit 1'", "-f", "bad"])
         assert result.exit_code == 0
-        assert result.output == "Command failed\n"
+        assert result.output == "Command exit with 1\nSending message is done.\n"
 
     def test_watch(self):
         assert self.runner.invoke(self.qslack, ["watch", "--help"]).exit_code == 0
