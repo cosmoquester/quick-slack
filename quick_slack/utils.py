@@ -11,7 +11,6 @@ def load_config():
 
 
 def modify_config(key, value):
-    CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.json")
     config = load_config()
     config[key] = value
 
