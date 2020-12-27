@@ -86,3 +86,18 @@ def get_direct_message_id(username):
                 return channel_info["id"]
         if not pararms["cursor"]:
             return None
+
+
+def get_usergroup_id(usergroup_handle):
+    config = load_config()
+
+    uri = "https://slack.com/api/usergroups.list"
+    response = requests.get(uri, headers={"Authorization": f"Bearer {config['slack_oauth_token']}"}).json()
+
+    if not response["ok"]:
+        print(response, file=sys.stderr)
+        raise Exception(response["error"])
+
+    for usergroup_info in response["usergroups"]:
+        if usergroup_handle == usergroup_info["handle"]:
+            return usergroup_info["id"]
