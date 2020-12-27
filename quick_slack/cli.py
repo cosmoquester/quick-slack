@@ -6,7 +6,7 @@ import click
 import psutil
 
 from .low_api import get_channel_id, get_direct_message_id, get_usergroup_id, send_message
-from .utils import load_config, modify_config
+from .utils import load_config, modify_config, run_background
 
 config = click.Group()
 
@@ -87,9 +87,7 @@ def set_config(api_token, default_mentions, default_channel_name, default_channe
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention user/groups")
 @click.option("-c", "--channel-name", help="Channel name to send message, use default channel in config if not passed")
 def send(message, mention, channel_name):
-    """
-    Send message to the channel
-    """
+    """ Send message to the channel """
     config = load_config()
 
     if channel_name:
@@ -132,11 +130,15 @@ def cond(command, success, fail, mention):
 @click.argument("command")
 @click.option("-n", "--interaval", type=click.FLOAT, help="seconds to wait between updates")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
-def watch(command, interaval, mention):
+@click.option("-s", "--silent", is_flag=True, help="If use this flag, ignore output else print output")
+def watch(command, interaval, mention, silent):
     """ Execute command every interval and send message of excution output """
     while True:
         result = subprocess.run(shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        send_message(result.stdout.decode("utf-8"), mention=mention)
+        output = result.stdout.decode("utf-8")
+        send_message(output, mention=mention)
+        if not silent:
+            print(output)
         sleep(interaval)
 
 
@@ -144,10 +146,22 @@ def watch(command, interaval, mention):
 @click.argument("process_id", type=click.INT)
 @click.argument("message")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
-def ifend(process_id, message, mention):
-    while psutil.pid_exists(process_id):
-        sleep(3)
-    send_message(message, mention=mention)
+@click.option("-n", "--interaval", type=click.FLOAT, default=1.0, help="seconds to wait between checking liveness")
+def ifend(process_id, message, mention, interaval):
+    """
+    Check the process is alive in every three seconds and when the process is dead, send message
+
+    the process_id is the id of process to mornitor.
+    Warn this command run python process as backgroud so can be infinitely running if the process is not dead.
+    """
+
+    def _task():
+        print(f"Start mornitoring process {process_id}...")
+        while psutil.pid_exists(process_id):
+            sleep(interaval)
+        send_message(message, mention=mention)
+
+    run_background(_task)
 
 
 if __name__ == "__main__":
