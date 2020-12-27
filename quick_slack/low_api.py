@@ -5,11 +5,19 @@ import requests
 from .utils import load_config
 
 
-def send_message(token, channel_id, text):
+def send_message(text, channel_id=None, mention=False):
+    config = load_config()
+
+    if channel_id is None:
+        channel_id = config["default_channel_id"]
+
+    if mention:
+        text = " ".join(config["default_mentions"]) + "\n" + text
+
     response = requests.post(
         "https://slack.com/api/chat.postMessage",
         json={"channel": channel_id, "text": text},
-        headers={"Authorization": f"Bearer {token}"},
+        headers={"Authorization": f"Bearer {config['slack_oauth_token']}"},
     ).json()
 
     return response
