@@ -175,15 +175,17 @@ def ifend(process_id: int, message: str, mention: bool, interaval: float):
     run_background(_task)
 
 
+qslack = click.Group(
+    "qslack",
+    commands={
+        "config": config,
+        "send": send,
+        "cond": cond,
+        "watch": watch,
+        "ifend": ifend,
+    },
+)
+
+
 if __name__ == "__main__":
-    qslack = click.Group(
-        "qslack",
-        commands={
-            "config": config,
-            "send": send,
-            "cond": cond,
-            "watch": watch,
-            "ifend": ifend,
-        },
-    )
     qslack()

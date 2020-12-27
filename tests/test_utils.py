@@ -6,7 +6,7 @@ import pytest
 from quick_slack import utils
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def config():
     utils.CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "data", "test_config.json")
     return utils.load_config()
@@ -15,7 +15,7 @@ def config():
 @pytest.fixture()
 def resource(request):
     def teardown():
-        with open(utils.CONFIG_FILE_PATH, "w") as f:
+        with open(utils.CONFIG_FILE_PATH, "w", encoding="utf-8") as f:
             json.dump({"slack_oauth_token": "", "default_channel_id": "", "default_mentions": []}, f, indent=4)
 
     request.addfinalizer(teardown)
