@@ -5,7 +5,7 @@ with open("README.md") as f:
 
 setup(
     name="quick-slack",
-    version="0.0.1",
+    version="1.0.0",
     description="CLI tool to send message to mornitor status, notify process end, etc by slack.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -18,6 +18,7 @@ setup(
     package_data={"quick_slack": ["config.json"]},
     keywords=["slack", "message"],
     classifiers=[
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Intended Audience :: Developers",
