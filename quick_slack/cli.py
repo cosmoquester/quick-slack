@@ -3,6 +3,7 @@ import subprocess
 from time import sleep
 
 import click
+import psutil
 
 from .low_api import get_channel_id, get_direct_message_id, get_usergroup_id, send_message
 from .utils import load_config, modify_config
@@ -140,12 +141,13 @@ def watch(command, interaval, mention):
 
 
 @click.command()
-@click.argument("process_id")
+@click.argument("process_id", type=click.INT)
 @click.argument("message")
 @click.option("-m", "--mention", is_flag=True, help="If use this flag, mention default mention users")
-def ifexit(process_id, message, mention):
-    # TODO: Implement
-    pass
+def ifend(process_id, message, mention):
+    while psutil.pid_exists(process_id):
+        sleep(3)
+    send_message(message, mention=mention)
 
 
 if __name__ == "__main__":
@@ -156,7 +158,7 @@ if __name__ == "__main__":
             "send": send,
             "cond": cond,
             "watch": watch,
-            "ifexit": ifexit,
+            "ifend": ifend,
         },
     )
     qslack()
