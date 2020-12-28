@@ -37,8 +37,8 @@ $ pip install quick-slack
 
 그 다음 Bot Token Scope에 아래의 권한을 추가해줍니다.
 
-[Permission](images/image1.png)
-[Permission](images/image2.png)
+![Permission](images/image1.png)
+![Permission](images/image2.png)
 
 - [chat:write](https://api.slack.com/scopes/chat:write)
 - [channels:read](https://api.slack.com/scopes/channels:read)
@@ -50,8 +50,8 @@ $ pip install quick-slack
 
 그리고 Install App 에서 Workspace에 App을 Install하면 xoxb로 시작하는 Bot User OAuth Access Token을 발급받습니다.
 
-[Install](images/image1.png)
-[Token](images/image1.png)
+![Install](images/image3.png)
+![Token](images/image4.png)
 
 ## Config 설정
 
