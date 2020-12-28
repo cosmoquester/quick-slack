@@ -219,7 +219,7 @@ Options:
   -n, --interaval FLOAT  seconds to wait between checking liveness
   --help                 Show this message and exit.
 ```
-pid을 입력하면 실행중인 프로세스가 끝났을 때 슬랙으로 메세지를 전송하는 명령어입니다.
+pid를 입력하면 실행중인 프로세스가 끝났을 때 슬랙으로 메세지를 전송하는 명령어입니다.
 
 ```
 $ qslack ifend 18103 "end end"
