@@ -184,11 +184,14 @@ def ifend(process_id: int, message: str, mention: bool, interaval: float):
         print(f"Start mornitoring process {process_id}...")
         while psutil.pid_exists(process_id):
             sleep(interaval)
+        click.echo(f"[+] QuickSlack: Process {process_id} end")
+
         response = send_message(message, mention=mention)
         if not response["ok"]:
             click.echo("Error occured in sending message!", err=True)
             click.echo(str(response), err=True)
             exit(1)
+        click.echo(f"[+] QuickSlack: Sent message")
 
     run_background(_task)
 
