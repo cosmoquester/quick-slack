@@ -1,5 +1,7 @@
 # Quick slack
 
+[![codecov](https://codecov.io/gh/psj8252/quick-slack/branch/master/graph/badge.svg?token=MREUJNXE7L)](https://codecov.io/gh/psj8252/quick-slack)
+
 - CLI tool to send message to mornitor status, notify process end, etc by slack.
 - 한국어 README는 [여기](README.ko.md)를 클릭해주세요.
 

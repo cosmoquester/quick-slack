@@ -1,5 +1,7 @@
 # Quick slack
 
+[![codecov](https://codecov.io/gh/psj8252/quick-slack/branch/master/graph/badge.svg?token=MREUJNXE7L)](https://codecov.io/gh/psj8252/quick-slack)
+
 - 빠르게 slack 메세지를 보내는 cli툴입니다. 프로세스 종료 알림, 실행 결과에 따라 알림 등의 기능을 지원합니다.
 
 # Install
