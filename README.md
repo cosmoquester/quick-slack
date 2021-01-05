@@ -23,6 +23,12 @@ $ pipx install quick-slack
 ```
 After complete the installation of pipx, install Quick-slack through pipx
 
+```
+Failing command: ['/home/user/.local/pipx/shared/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']
+'/usr/bin/python3 -m venv --clear /home/user/.local/pipx/shared' failed
+```
+If an error like above occured, you need to install `python3-venv` or `python3.x-venv` if you installed with commands like `python3.x -m pipx install quick-slack`
+
 ## Install Quick Slack for some environment
 
 If you want to install it only in a specific environment, you can install it as a normal pip.

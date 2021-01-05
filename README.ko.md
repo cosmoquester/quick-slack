@@ -24,6 +24,12 @@ $ pipx install quick-slack
 ```
 pipx의 설치를 완료하면 pipx를 통해 quick-slack을 설치합니다.
 
+```
+Failing command: ['/home/user/.local/pipx/shared/bin/python3', '-Im', 'ensurepip', '--upgrade', '--default-pip']
+'/usr/bin/python3 -m venv --clear /home/user/.local/pipx/shared' failed
+```
+위와 갈은 에러가 발생한다면 `python3-venv`를 설치해줘야 합니다. `python3.x -m pipx install quick-slack`와 같은 명령어로 설치했을 경우 `python3.x-venv`를 설치해줘야 합니다. 
+
 ## Install Quick Slack for some environment
 
 만약 특정 환경에만 설치하고 싶다면 평범하게 pip로 설치하면 됩니다.
