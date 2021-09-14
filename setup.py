@@ -11,7 +11,7 @@ setup(
     long_description_content_type="text/markdown",
     python_requires=">=3.7",
     install_requires=["click", "requests", "psutil"],
-    url="https://github.com/psj8252/quick-slack.git",
+    url="https://github.com/cosmoquester/quick-slack.git",
     author="Park Sangjun",
     packages=find_packages(exclude=["tests"]),
     entry_points={"console_scripts": ["qslack = quick_slack.cli:qslack"]},
